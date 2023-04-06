@@ -13,7 +13,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+env:
+  ECR_REGISTRY: 811502318109.dkr.ecr.us-east-1.amazonaws.com
 jobs:
   build:
 
@@ -40,9 +41,8 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
     - name: Build, tag, and push image to Amazon ECR
       env:
-        ECR_REGISTRY: 811502318109.dkr.ecr.us-east-1.amazonaws.com
         ECR_REPOSITORY: myrepo
-        IMAGE_TAG: 8
+        IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
